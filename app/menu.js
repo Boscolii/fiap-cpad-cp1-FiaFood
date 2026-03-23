@@ -1,59 +1,85 @@
-import { View, Text, Button, StyleSheet,Image } from 'react-native';
-import { useRouter } from 'expo-router';
-export default function Home() {
-  const router = useRouter();
+import { View, Text, StyleSheet,ScrollView,Image,TouchableOpacity} from 'react-native';
+import { useCarrinho } from '../context/carrinhoContext';
+
+const COLORS = {
+  primary: '#ba0a4e',
+  black: '#000000',
+  surface: '#1a1a1a',
+  white: '#ffffff',
+  textLight: '#aaaaaa'
+};
+
+const PRODUTOS = {
+  Salgados: [
+    { id: 1, nome: 'Coxinha', preco: 9.90, img: require('../assets/menu/coxinha.jpg') },
+    { id: 2, nome: 'Esfiha', preco: 8.00, img: require('../assets/menu/esfirra.jpg') },
+    { id: 3, nome: 'Pão De Queijo', preco: 7.00, img: require('../assets/menu/paodequeijo.jpg')},
+  ],
+  Bebidas: [
+    { id: 4, nome: 'Coca-Cola', preco: 6.00, img: require('../assets/menu/refri.jpg') },
+    { id: 5, nome: 'Guaraná', preco: 6.00, img: require('../assets/menu/guarana.jpg') },
+  ],
+  Doces: [
+    { id: 6, nome: 'Fatia bolo de chocolate', preco: 15.00, img: require('../assets/menu/bolo.jpg') },
+    { id: 7, nome: 'Cookie', preco: 12.90, img: require('../assets/menu/cookie.jpg') },
+
+  ]
+};
+
+export default function Menu() {
+  const { adicionarItem } = useCarrinho();
+
+  const categorias = Object.keys(PRODUTOS);
+
   return (
     <View style={styles.container}>
+      <Text style={styles.titulo}>Menu</Text>
+
+      <ScrollView contentContainerStyle={styles.lista} showsVerticalScrollIndicator={false}>
         
-        <View style={styles.barraCima}>
-            <Image source={require("../assets/cafe.png")} style={styles.imgTopo}  />
-            <Text style={styles.Titulo}>FIAFOOD</Text>
+        {categorias.map((categoria) => (
+          <View key={categoria}>
+            <Text style={styles.tituloSecao}>{categoria}</Text>
 
-        </View>
-        <View style={styles.objVendas}>
-            <View style={styles.cards} >
-                <Image source={require("../assets/paodequeijo.jpg")} style={styles.imgCard}/>
-                <Text style={styles.descricaoImg}>Pao de Queijo</Text>
-                <Text style={styles.preco}>R$7,90</Text>
-            </View>
-            <View style={styles.cards}>
-                <Image source={require("../assets/coxinha.jpg")} style={styles.imgCard}  />
-                <Text style={styles.descricaoImg}>Coxinha</Text>
-                <Text style={styles.preco}>R$12,50</Text>
-            </View>
-        </View>
-        <View style={styles.objVendas}>
-            <View style={styles.cards}>
-                 <Image source={require("../assets/bolo.jpg")} style={styles.imgCard}  /> 
-                 <Text style={styles.descricaoImg}>Bolo chocolate</Text>
-                <Text style={styles.preco}>R$19,90</Text>
-            </View>
-            <View style={styles.cards}>
-                 <Image source={require("../assets/cookie.jpg")} style={styles.imgCard}  /> 
-                 <Text style={styles.descricaoImg}>Cookie</Text>
-                <Text style={styles.preco}>R$12,00</Text>
-            </View>
-        </View>
-        
+            {PRODUTOS[categoria].map((item) => (
+              <View key={item.id} style={styles.card}>
+                
+                <Image source={item.img} style={styles.img} />
 
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.nome}>{item.nome}</Text>
+                  <Text style={styles.preco}>
+                    R$ {item.preco.toFixed(2).replace('.', ',')}
+                  </Text>
+                </View>
 
+                <TouchableOpacity
+                  style={styles.botaoAdd}
+                  onPress={() => adicionarItem(item)}
+                >
+                  <Text style={styles.botaoText}>+</Text>
+                </TouchableOpacity>
 
+              </View>
+            ))}
+
+          </View>
+        ))}
+
+      </ScrollView>
     </View>
-
-
-
   );
 }
+
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#292929' },
-  conteudo : {flex: 1,alignItems: "center",justifyContent: "center",},
-  titulo:    { fontSize: 20, fontWeight: 'bold', marginBottom: 24 },
-  Titulo:{ color: '#ba0a4e', fontSize: 12, fontWeight: 'bold',},
-  barraCima: {position: "absolute",top: 0,backgroundColor: '#000000', height: 50,width: "100%",justifyContent: "center", flexDirection: "row", alignItems: 'center'},
-  imgTopo: {width: 60, height: 60, borderRadius:25, marginLeft: -50},
-  objVendas: {flexDirection: 'row', justifyContent: 'space-between', padding: 9,marginBottom:40, marginTop:30},
-  cards: { flex: 1, height: 210, backgroundColor: '#ba0a4e', margin: 3, borderRadius: 8, alignItems: 'center', justifyContent: 'flex-start',},
-  imgCard: {height: 200, alignContent: 'center', width: 179, borderRadius:8, marginTop: 5 },
-  descricaoImg: {fontSize: 25, fontWeight: 'bold', marginTop: 15, color: '#fff'},
-  preco: {fontSize: 25, fontWeight: 'bold', backgroundColor: '#ba0a4e', borderRadius: 5}
+    container: {flex: 1,backgroundColor: COLORS.black,paddingTop: 40},
+    titulo: {color: COLORS.white,fontSize: 24,fontWeight: 'bold',marginHorizontal: 20,marginBottom: 10},
+    lista: {paddingHorizontal: 20,paddingBottom: 100},
+    tituloSecao: {color: COLORS.white,fontSize: 20,fontWeight: 'bold',marginTop: 20,paddingBottom: 10},
+    card: {flexDirection: 'row',backgroundColor: COLORS.surface,borderRadius: 12,padding: 15,marginBottom: 10,alignItems: 'center'},
+    img: {width: 60,height: 60,borderRadius: 10,marginRight: 10},
+    nome: {color: COLORS.white,fontSize: 16},
+    preco: {color: COLORS.primary,fontWeight: 'bold',marginTop: 5},
+    botaoAdd: {backgroundColor: COLORS.primary,width: 35,height: 35,borderRadius: 18,justifyContent: 'center',alignItems: 'center'},
+    botaoText: {color: '#fff',fontSize: 18,fontWeight: 'bold'},
 });
