@@ -40,28 +40,31 @@ function TabsNavegacao() {
           ),
         }}
       />
-    </Tabs>
-  );
-}
-
       <Tabs.Screen
         name="menu"
         options={{
           title: 'Menu',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="restaurant" size={size} color={color} />
-          ),
-        }}
+          <Ionicons name="restaurant" size={size} color={color} />
+    ),
+  }}
 />
+    </Tabs>
+    
+  );
+}
+
+
+
 
 export default function Layout() {
   return (
-    <CarrinhoProvider>   {}
+    <CarrinhoProvider>
+    
       <TabsNavegacao />
     </CarrinhoProvider>
   );
 }
-
 const styles = StyleSheet.create({
   badge:     { position: 'absolute', right: -8, top: -5, backgroundColor: '#ba0a4e', borderRadius: 10, width: 18, height: 18, justifyContent: 'center', alignItems: 'center' },
   badgeText: { color: '#fff', fontSize: 10, fontWeight: 'bold' },

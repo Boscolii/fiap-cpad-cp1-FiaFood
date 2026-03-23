@@ -14,14 +14,15 @@ const PRODUTOS = {
     { id: 1, nome: 'Coxinha', preco: 9.90, img: require('../assets/menu/coxinha.jpg') },
     { id: 2, nome: 'Esfiha', preco: 8.00, img: require('../assets/menu/esfirra.jpg') },
     { id: 3, nome: 'Pão De Queijo', preco: 7.00, img: require('../assets/menu/paodequeijo.jpg')},
+    { id: 4, nome: 'Esfiha De Carne', preco: 8.00, img: require('../assets/menu/esfirra.jpg')},
   ],
   Bebidas: [
-    { id: 4, nome: 'Coca-Cola', preco: 6.00, img: require('../assets/menu/refri.jpg') },
-    { id: 5, nome: 'Guaraná', preco: 6.00, img: require('../assets/menu/guarana.jpg') },
+    { id: 5, nome: 'Coca-Cola', preco: 6.00, img: require('../assets/menu/refri.jpg') },
+    { id: 6, nome: 'Guaraná', preco: 6.00, img: require('../assets/menu/guarana.jpg') },
   ],
   Doces: [
-    { id: 6, nome: 'Fatia bolo de chocolate', preco: 15.00, img: require('../assets/menu/bolo.jpg') },
-    { id: 7, nome: 'Cookie', preco: 12.90, img: require('../assets/menu/cookie.jpg') },
+    { id: 7, nome: 'Fatia bolo de chocolate', preco: 15.00, img: require('../assets/menu/bolo.jpg') },
+    { id: 8, nome: 'Cookie', preco: 12.90, img: require('../assets/menu/cookie.jpg') },
 
   ]
 };
