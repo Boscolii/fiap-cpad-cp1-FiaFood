@@ -21,8 +21,9 @@ const PRODUTOS = {
     { id: 6, nome: 'Guaraná', preco: 6.00, img: require('../assets/menu/guarana.jpg') },
   ],
   Doces: [
-    { id: 7, nome: 'Fatia bolo de chocolate', preco: 15.00, img: require('../assets/menu/bolo.jpg') },
+    { id: 7, nome: 'Fatia Bolo de Chocolate', preco: 15.00, img: require('../assets/menu/bolo.jpg') },
     { id: 8, nome: 'Cookie', preco: 12.90, img: require('../assets/menu/cookie.jpg') },
+    { id: 9, nome: 'Fatia de Pudim', preco: 10.00, img: require('../assets/menu/pudim.jpg') }
 
   ]
 };
