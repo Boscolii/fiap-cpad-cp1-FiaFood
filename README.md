@@ -84,7 +84,7 @@ Depois, abra o QR Code pelo Expo Go ou execute no emulador.
 cadastro -> login -> busca no menu -> adicionar item -> aplicar cupom -> finalizar pedido -> logout
 ```
 
-Link do video/GIF: adicionar aqui.
+Link do GIF: https://drive.google.com/drive/folders/18VDbS9RYCyxGPXc6h-ViOnVutZT7ZWky?usp=sharing
 
 ## Estrutura do Projeto
 
