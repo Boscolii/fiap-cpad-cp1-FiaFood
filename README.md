@@ -54,17 +54,31 @@ Depois, abra o QR Code pelo Expo Go ou execute no emulador.
 
 ## Demonstracao Visual
 
-Antes da entrega, adicionar prints atualizados de todas as telas:
 
-- Login
-- Cadastro
-- Home
-- Menu com busca
-- Carrinho vazio
-- Carrinho com itens
-- Cupons
+### Login
+<img width="317" height="681" alt="image" src="https://github.com/user-attachments/assets/cecb4c9c-aaec-4526-9c37-0608394800ff" />
 
-Tambem adicionar um GIF ou video demonstrando o fluxo completo:
+### Cadastro
+<img width="310" height="678" alt="image" src="https://github.com/user-attachments/assets/58fd173f-525a-4c47-bb70-f41acd96af46" />
+
+### Home
+<img width="309" height="683" alt="image" src="https://github.com/user-attachments/assets/fdea9090-07ea-403e-b75a-f81c417890a1" />
+
+### Menu com busca
+<img width="308" height="683" alt="image" src="https://github.com/user-attachments/assets/330f66be-f7e8-428b-9713-bd3baec3d2d4" />
+<img width="322" height="675" alt="image" src="https://github.com/user-attachments/assets/5afcd75e-7edd-4eb9-969f-da260d03ee3f" />
+
+### Carrinho vazio
+<img width="313" height="679" alt="image" src="https://github.com/user-attachments/assets/d4522870-c24a-439d-bf4d-9c89a2c11318" />
+
+
+### Carrinho com itens
+<img width="317" height="683" alt="image" src="https://github.com/user-attachments/assets/9895e18a-5890-4394-a84b-8b775c1e606e" />
+
+### Cupons
+<img width="310" height="687" alt="image" src="https://github.com/user-attachments/assets/8dd9ea96-1f71-470a-a7c3-779355e3eb86" />
+
+### Fluxo do app
 
 ```text
 cadastro -> login -> busca no menu -> adicionar item -> aplicar cupom -> finalizar pedido -> logout
