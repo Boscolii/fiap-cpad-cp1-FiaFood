@@ -1,12 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from './AuthContext';
 
 const CarrinhoContext = createContext(null);
-
-const CHAVE_CARRINHO = '@fiafood:carrinho';
-const CHAVE_CUPOM = '@fiafood:cupom';
-const CHAVE_CUPONS = '@fiafood:cupons';
-const CHAVE_PEDIDOS = '@fiafood:pedidos';
 
 const cuponsIniciais = [
   { id: 1, emoji: '*', titulo: 'Primeira Compra', codigo: 'BEMVINDO15', tipo: 'porcentagem', valor: 15, resgatado: false },
@@ -16,6 +12,8 @@ const cuponsIniciais = [
 ];
 
 export function CarrinhoProvider({ children }) {
+  const { usuario } = useAuth();
+
   const [carrinho, setCarrinho] = useState([]);
   const [cupomAplicado, setCupomAplicado] = useState(null);
   const [localEntrega, setLocalEntrega] = useState('Entrada - 1 Andar');
@@ -23,18 +21,33 @@ export function CarrinhoProvider({ children }) {
   const [pedidos, setPedidos] = useState([]);
   const [carregandoCarrinho, setCarregandoCarrinho] = useState(true);
 
+ 
+  const getChaveCarrinho = (userId) => `@fiafood:carrinho_${userId}`;
+  const getChaveCupom = (userId) => `@fiafood:cupom_${userId}`;
+  const getChaveCupons = (userId) => `@fiafood:cupons_${userId}`;
+  const getChavePedidos = (userId) => `@fiafood:pedidos_${userId}`;
+
+
   useEffect(() => {
     async function carregarDados() {
       try {
-        const carrinhoSalvo = await AsyncStorage.getItem(CHAVE_CARRINHO);
-        const cupomSalvo = await AsyncStorage.getItem(CHAVE_CUPOM);
-        const cuponsSalvos = await AsyncStorage.getItem(CHAVE_CUPONS);
-        const pedidosSalvos = await AsyncStorage.getItem(CHAVE_PEDIDOS);
+        if (!usuario) {
+          setCarrinho([]);
+          setCupomAplicado(null);
+          setPedidos([]);
+          setCupons(cuponsIniciais);
+          return;
+        }
 
-        if (carrinhoSalvo) setCarrinho(JSON.parse(carrinhoSalvo));
-        if (cupomSalvo) setCupomAplicado(JSON.parse(cupomSalvo));
-        if (cuponsSalvos) setCupons(JSON.parse(cuponsSalvos));
-        if (pedidosSalvos) setPedidos(JSON.parse(pedidosSalvos));
+        const carrinhoSalvo = await AsyncStorage.getItem(getChaveCarrinho(usuario.id));
+        const cupomSalvo = await AsyncStorage.getItem(getChaveCupom(usuario.id));
+        const cuponsSalvos = await AsyncStorage.getItem(getChaveCupons(usuario.id));
+        const pedidosSalvos = await AsyncStorage.getItem(getChavePedidos(usuario.id));
+
+        setCarrinho(carrinhoSalvo ? JSON.parse(carrinhoSalvo) : []);
+        setCupomAplicado(cupomSalvo ? JSON.parse(cupomSalvo) : null);
+        setCupons(cuponsSalvos ? JSON.parse(cuponsSalvos) : cuponsIniciais);
+        setPedidos(pedidosSalvos ? JSON.parse(pedidosSalvos) : []);
       } catch (error) {
         console.log('Erro ao carregar dados do carrinho', error);
       } finally {
@@ -42,44 +55,67 @@ export function CarrinhoProvider({ children }) {
       }
     }
 
+    setCarregandoCarrinho(true);
     carregarDados();
-  }, []);
+  }, [usuario]);
 
+  
   useEffect(() => {
-    if (!carregandoCarrinho) {
-      AsyncStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
+    if (!carregandoCarrinho && usuario) {
+      AsyncStorage.setItem(
+        getChaveCarrinho(usuario.id),
+        JSON.stringify(carrinho)
+      );
     }
-  }, [carrinho, carregandoCarrinho]);
+  }, [carrinho, carregandoCarrinho, usuario]);
+
 
   useEffect(() => {
-    if (!carregandoCarrinho) {
+    if (!carregandoCarrinho && usuario) {
       if (cupomAplicado) {
-        AsyncStorage.setItem(CHAVE_CUPOM, JSON.stringify(cupomAplicado));
+        AsyncStorage.setItem(
+          getChaveCupom(usuario.id),
+          JSON.stringify(cupomAplicado)
+        );
       } else {
-        AsyncStorage.removeItem(CHAVE_CUPOM);
+        AsyncStorage.removeItem(getChaveCupom(usuario.id));
       }
     }
-  }, [cupomAplicado, carregandoCarrinho]);
+  }, [cupomAplicado, carregandoCarrinho, usuario]);
+
 
   useEffect(() => {
-    if (!carregandoCarrinho) {
-      AsyncStorage.setItem(CHAVE_CUPONS, JSON.stringify(cupons));
+    if (!carregandoCarrinho && usuario) {
+      AsyncStorage.setItem(
+        getChaveCupons(usuario.id),
+        JSON.stringify(cupons)
+      );
     }
-  }, [cupons, carregandoCarrinho]);
+  }, [cupons, carregandoCarrinho, usuario]);
+
 
   useEffect(() => {
-    if (!carregandoCarrinho) {
-      AsyncStorage.setItem(CHAVE_PEDIDOS, JSON.stringify(pedidos));
+    if (!carregandoCarrinho && usuario) {
+      AsyncStorage.setItem(
+        getChavePedidos(usuario.id),
+        JSON.stringify(pedidos)
+      );
     }
-  }, [pedidos, carregandoCarrinho]);
+  }, [pedidos, carregandoCarrinho, usuario]);
 
+ 
   const adicionarItem = (produto) => setCarrinho((prev) => [...prev, produto]);
-  const removerItem = (index) => setCarrinho((prev) => prev.filter((_, i) => i !== index));
+
+  const removerItem = (index) =>
+    setCarrinho((prev) => prev.filter((_, i) => i !== index));
+
   const limparCarrinho = () => {
     setCarrinho([]);
     setCupomAplicado(null);
   };
+
   const aplicarCupom = (cupom) => setCupomAplicado(cupom);
+
   const removerCupom = () => setCupomAplicado(null);
 
   const resgatarCupom = (id) => {
@@ -87,18 +123,19 @@ export function CarrinhoProvider({ children }) {
     if (!cupom || cupom.resgatado) return null;
 
     aplicarCupom(cupom);
-    setCupons((prev) => prev.map((item) => {
-      if (item.id === id) {
-        return { ...item, resgatado: true };
-      }
-      return item;
-    }));
+
+    setCupons((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, resgatado: true } : item
+      )
+    );
 
     return cupom;
   };
 
   const total = (() => {
     let valor = carrinho.reduce((acc, item) => acc + item.preco, 0);
+
     if (cupomAplicado) {
       if (cupomAplicado.tipo === 'porcentagem') {
         valor -= valor * (cupomAplicado.valor / 100);
@@ -106,6 +143,7 @@ export function CarrinhoProvider({ children }) {
         valor -= cupomAplicado.valor;
       }
     }
+
     return Math.max(valor, 0);
   })();
 
@@ -126,15 +164,25 @@ export function CarrinhoProvider({ children }) {
   };
 
   return (
-    <CarrinhoContext.Provider value={{
-      carrinho, adicionarItem, removerItem, limparCarrinho,
-      cupomAplicado, aplicarCupom, removerCupom,
-      cupons, resgatarCupom,
-      pedidos, finalizarPedido,
-      carregandoCarrinho,
-      localEntrega, setLocalEntrega,
-      total,
-    }}>
+    <CarrinhoContext.Provider
+      value={{
+        carrinho,
+        adicionarItem,
+        removerItem,
+        limparCarrinho,
+        cupomAplicado,
+        aplicarCupom,
+        removerCupom,
+        cupons,
+        resgatarCupom,
+        pedidos,
+        finalizarPedido,
+        carregandoCarrinho,
+        localEntrega,
+        setLocalEntrega,
+        total,
+      }}
+    >
       {children}
     </CarrinhoContext.Provider>
   );
