@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useCarrinho } from '../context/carrinhoContext';
+import { useAuth } from '../context/AuthContext';
 import {
   View,
   Text,
@@ -34,6 +35,7 @@ export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const { adicionarItem } = useCarrinho();
+  const { usuario, logout } = useAuth();
 
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 1000);
@@ -97,7 +99,13 @@ export default function Home() {
       
       <View style={styles.barraCima}>
         <Image source={require("../assets/cafe.png")} style={styles.imgTopo} />
-        <Text style={styles.Titulo}>FIAFOOD</Text>
+        <View style={styles.tituloArea}>
+          <Text style={styles.Titulo}>FIAFOOD</Text>
+          <Text style={styles.usuarioTexto}>Oi, {usuario?.nome ? usuario.nome.split(' ')[0] : 'aluno'}</Text>
+        </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+          <Ionicons name="log-out-outline" size={22} color={COLORS.white} />
+        </TouchableOpacity>
       </View>
 
       {renderHome()}
@@ -110,8 +118,11 @@ const styles = StyleSheet.create({
 container: { flex: 1, backgroundColor: COLORS.black, },
 loadingContainer: {flex: 1,justifyContent: 'center',alignItems: 'center',backgroundColor: COLORS.black},
 Titulo:{ color: COLORS.primary, fontSize: 25, fontWeight: 'bold',},
-barraCima: {top: 0,backgroundColor: '#000000', height: 50,width: "100%",justifyContent: "center", flexDirection: "row", alignItems: 'center'},
-imgTopo: {width: 60, height: 60, borderRadius:25, marginLeft: -50},
+barraCima: {top: 0,backgroundColor: '#000000', height: 64,width: "100%",justifyContent: "space-between", flexDirection: "row", alignItems: 'center', paddingHorizontal: 18},
+imgTopo: {width: 54, height: 54, borderRadius:25},
+tituloArea: { flex: 1, marginLeft: 10 },
+usuarioTexto: { color: COLORS.textLight, fontSize: 12, marginTop: -2 },
+logoutButton: { backgroundColor: COLORS.grayBg, width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
 bannerContainer: {backgroundColor: COLORS.primary,marginHorizontal: 20,borderRadius: 12,padding: 20,flexDirection: 'row',alignItems: 'center',justifyContent: 'space-between',marginTop: 10},
 bannerTextContainer: { flex: 1 },
 bannerTitle: {color: COLORS.white,fontSize: 18,fontWeight: 'bold'},

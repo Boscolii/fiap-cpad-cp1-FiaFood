@@ -1,71 +1,62 @@
-import { View, Text, StyleSheet,Image,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useCarrinho } from '../context/carrinhoContext';
 
-
-const cuponsIniciais = [
-  { id: 1, emoji: '🎉', titulo: 'Primeira Compra', codigo: 'BEMVINDO15', tipo: 'porcentagem', valor: 15, resgatado: false },
-  { id: 2, emoji: '📱', titulo: 'Pedido pelo App', codigo: 'APP5', tipo: 'porcentagem', valor: 5, resgatado: false },
-  { id: 3, emoji: '👥', titulo: 'Começo de Ano', codigo: 'ANOVO10', tipo: 'porcentagem', valor: 10, resgatado: false },
-  { id: 4, emoji: '🍗', titulo: 'Segundo Ano', codigo: 'SEGUNDOANO5', tipo: 'fixo', valor: 5, resgatado: false },
-];
-
 export default function Cupons() {
-  const [cupons, setCupons] = useState(cuponsIniciais);
   const [mensagem, setMensagem] = useState(null);
-  const { aplicarCupom } = useCarrinho();
+  const { cupons, resgatarCupom } = useCarrinho();
 
   useEffect(() => {
     if (mensagem) {
-      setTimeout(() => setMensagem(null), 3000);
+      const timer = setTimeout(() => setMensagem(null), 3000);
+      return () => clearTimeout(timer);
     }
   }, [mensagem]);
 
-  function resgatarCupom(id) {
-  const cupom = cupons.find((c) => c.id === id);
-  if (cupom.resgatado) return;
+  function resgatar(id) {
+    const cupom = resgatarCupom(id);
+    if (!cupom) return;
 
+    setMensagem(`Cupom "${cupom.codigo}" aplicado!`);
+  }
 
-  aplicarCupom(cupom);
-
-  setCupons(cupons.map((c) => {
-    if (c.id === id) {
-      return { ...c, resgatado: true };
-    }
-    return c;
-  }));
-
-  setMensagem(`Cupom "${cupom.codigo}" aplicado!`);
-}
   const disponiveis = cupons.filter((c) => !c.resgatado).length;
 
   return (
-
     <View style={styles.container}>
+      <Text style={styles.titulo}>Seus Cupons ({disponiveis} disponiveis)</Text>
 
+      {mensagem ? <Text style={styles.feedback}>{mensagem}</Text> : null}
 
-      <Text style={styles.titulo}>🎟️ Seus Cupons ({disponiveis} disponíveis)</Text>
-
-      {mensagem ? <Text style={styles.feedback}>✅ {mensagem}</Text> : null}
-
-      {disponiveis === 0 ? <Text style={styles.vazio}>😢 Você já resgatou todos os cupons!</Text> : null}
-
-      {cupons.map((cupom) => (
-        <View key={cupom.id} style={cupom.resgatado ? styles.cardUsado : styles.card}>
-          <View style={styles.cardInfo}>
-            <Text style={styles.cardTitulo}>{cupom.emoji} {cupom.titulo}</Text>
-            <Text style={styles.cardDesconto}>{cupom.tipo === 'porcentagem'? `${cupom.valor}% OFF`: `R$ ${cupom.valor} OFF`}
-</Text>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.lista}>
+        {disponiveis === 0 ? (
+          <View style={styles.vazioArea}>
+            <Text style={styles.vazioTitulo}>Voce ja resgatou todos os cupons!</Text>
+            <Text style={styles.vazioTexto}>Os descontos usados ficam salvos mesmo depois de fechar o app.</Text>
           </View>
-          <Text style={styles.cardCodigo}>{cupom.codigo}</Text>
-          <TouchableOpacity
-            style={cupom.resgatado ? styles.botaoUsado : styles.botao}
-            onPress={() => resgatarCupom(cupom.id)}
-          >
-            <Text style={styles.botaoTexto}>{cupom.resgatado ? '✓ Usado' : 'Resgatar'}</Text>
-          </TouchableOpacity>
-        </View>
-      ))}
+        ) : null}
+
+        {cupons.map((cupom) => (
+          <View key={cupom.id} style={cupom.resgatado ? styles.cardUsado : styles.card}>
+            <View style={styles.cardInfo}>
+              <Text style={styles.cardTitulo}>{cupom.emoji} {cupom.titulo}</Text>
+              <Text style={styles.cardDesconto}>
+                {cupom.tipo === 'porcentagem' ? `${cupom.valor}% OFF` : `R$ ${cupom.valor} OFF`}
+              </Text>
+            </View>
+
+            <Text style={styles.cardCodigo}>{cupom.codigo}</Text>
+
+            <TouchableOpacity
+              style={cupom.resgatado ? styles.botaoUsado : styles.botao}
+              onPress={() => resgatar(cupom.id)}
+              disabled={cupom.resgatado}
+            >
+              <Text style={styles.botaoTexto}>{cupom.resgatado ? 'Usado' : 'Resgatar'}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -74,7 +65,10 @@ const styles = StyleSheet.create({
   container:   { flex: 1, backgroundColor: '#000000', padding: 16, paddingTop: 40 },
   titulo:      { color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 12 },
   feedback:    { color: '#a5d6a7', backgroundColor: '#1a4a1a', padding: 8, borderRadius: 6, marginBottom: 8 },
-  vazio:       { color: '#fff', textAlign: 'center', marginTop: 40, fontSize: 15 },
+  lista:       { paddingBottom: 100 },
+  vazioArea:   { alignItems: 'center', marginTop: 35, marginBottom: 20 },
+  vazioTitulo: { color: '#fff', textAlign: 'center', fontSize: 16, fontWeight: 'bold' },
+  vazioTexto:  { color: '#aaa', textAlign: 'center', marginTop: 6, fontSize: 13 },
   card:        { backgroundColor: '#292929', borderRadius: 10, padding: 20, marginBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   cardUsado:   { backgroundColor: '#000000', borderRadius: 10, padding: 20, marginBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', opacity: 0.45 },
   cardInfo:    { flex: 1 },
