@@ -1,141 +1,173 @@
-# 📱 FIAFOOD - Cantina FIAP (Checkpoint 2)
+# FIAFOOD - Cantina FIAP
 
-## 📌 Sobre o Projeto
-O **FIAFOOD** é um aplicativo desenvolvido para facilitar pedidos na cantina da FIAP, permitindo que alunos façam seus pedidos de forma rápida e prática, evitando filas e otimizando o tempo.
+Aplicativo em React Native com Expo para facilitar pedidos na cantina da FIAP. A ideia e reduzir filas nos intervalos, permitindo que o aluno veja o menu, monte o carrinho, aplique cupons e envie o pedido pelo app.
 
-No **Checkpoint 2**, o projeto evoluiu para uma aplicação mais completa, incorporando autenticação de usuários, persistência de dados e melhorias gerais de usabilidade.
+## Sobre o Projeto
 
----
+A operacao escolhida foi a cantina da FIAP, porque e um local de alto fluxo de alunos e com problema real de espera em horarios de pico.
 
-## 🚨 Problema que resolve
-Filas na cantina e demora no atendimento, principalmente em horários de intervalo.
+Esta versao e a evolucao do CP1 para o CP2. Alem das telas de Home, Menu, Cupons e Carrinho, agora o app possui autenticacao com cadastro/login, sessao persistida, dados funcionais salvos localmente e busca em tempo real no menu.
 
----
+## Funcionalidades
 
-## 🏫 Operação da FIAP escolhida
-A operação escolhida foi a **cantina da FIAP**, pois é um ponto de grande fluxo de alunos e apresenta problemas reais de tempo de espera.
+- Cadastro de usuario com nome, e-mail, senha e confirmacao de senha
+- Login validando e-mail e senha salvos no AsyncStorage
+- Sessao persistida para manter o usuario logado ao reabrir o app
+- Logout com limpeza da sessao
+- Protecao das telas principais para usuario nao logado
+- Menu dividido por categorias
+- Busca e filtragem em tempo real no menu
+- Adicao e remocao de produtos no carrinho
+- Persistencia do carrinho no AsyncStorage
+- Cupons de desconto com persistencia de cupons usados
+- Persistencia do cupom aplicado
+- Finalizacao do pedido com mensagem de sucesso na tela
+- Historico simples de pedidos salvos localmente
+- Feedback visual de loading, erro, sucesso e lista vazia
 
----
+## Integrantes do Grupo
 
-## 🚀 Funcionalidades
+- Erick Gimenez - RM564748
+- Henrique Boscoli - RM563651
+- Joao Henrique - RM563578
+- Sergio Mirabelo - RM562161
+- Tomazzo Canterucci - RM565566
 
-### 🧾 Funcionalidades do CP1 (mantidas)
-- Visualização do menu (Salgados, Bebidas e Doces)
-- Adição de produtos ao carrinho
-- Tela de carrinho com listagem de itens
-- Remoção de itens do carrinho
-- Sistema de cupons de desconto
-- Aplicação automática de desconto
-- Finalização de pedido
+## Como Rodar o Projeto
 
----
+### Pre-requisitos
 
-### 🔐 Novas funcionalidades do CP2
-- Cadastro de usuário com:
-  - Nome completo  
-  - E-mail válido  
-  - Senha (mín. 6 caracteres)  
-  - Confirmação de senha  
+- Node.js instalado
+- Expo Go no celular ou emulador Android/iOS
+- Expo SDK usado no projeto: 55
 
-- Login de usuário  
-- Validação de credenciais  
-- Persistência de dados com **AsyncStorage**  
-- Gerenciamento de estado global com **Context API (AuthContext)**  
-- Redirecionamento após login  
-- Validação de formulários  
-- Melhorias visuais (UI/UX)
+### Passo a passo
 
----
-
-## 💾 Persistência de Dados
-Os dados do usuário são armazenados localmente utilizando **AsyncStorage**, permitindo:
-- Login persistente
-- Validação de credenciais
-- Melhor experiência do usuário
-
----
-
-## 🌐 Estado Global
-- `AuthContext` → controle de autenticação (usuário logado)
-- `CarrinhoContext` → controle de produtos, cupons e total
-
----
-
-## 🔁 Fluxo do Aplicativo
-1. Usuário abre o app  
-2. Caso não esteja logado:
-   - Acessa Login ou Cadastro  
-3. Após login:
-   - Redirecionado para a aplicação principal  
-4. Pode realizar pedidos normalmente  
-5. Dados permanecem salvos no dispositivo  
-
----
-
-## 📂 Estrutura do Projeto
-
-/components /screens /context AuthContext.js carrinhoContext.js /app index.js menu.js carrinho.js cupons.js login.js register.js _layout.js App.js
-
----
-
-## 🛠️ Tecnologias Utilizadas
-- React Native
-- Expo
-- JavaScript
-- AsyncStorage
-- Context API
-- React Navigation
-
----
-
-## 🧠 Decisões Técnicas
-
-### Context API
-Utilizada para centralizar estados globais:
-- Carrinho de compras
-- Cupons
-- Usuário autenticado
-
----
-
-### Hooks Utilizados
-- `useState` → controle de estados locais  
-- `useEffect` → efeitos colaterais (carregamento, validações)  
-- `useContext` → acesso aos contextos globais  
-
----
-
-### Custom Hook
-- `useCarrinho` → abstrai o uso do CarrinhoContext  
-
----
-
-## ⭐ Diferencial Implementado
-- Persistência de login (usuário permanece logado ao reabrir o app)
-- Exibição do nome do usuário na aplicação
-- Botão de logout
-
----
-
-## 👨‍💻 Integrantes do Grupo
-- Erick Gimenez – RM564748  
-- Henrique Boscoli – RM563651  
-- João Henrique – RM563578  
-- Sergio Mirabelo – RM562161  
-- Tomazzo Canterucci – RM565566  
-
----
-
-## ▶️ Como Rodar o Projeto
-
-### Pré-requisitos
-- Node.js  
-- Expo CLI  
-- Expo Go (celular) ou emulador  
-
-### Passos
 ```bash
-git clone https://github.com/Boscolii/fiap-cpad-cp1-FiaFood.git
-cd fiap-cpad-cp1-FiaFood
+git clone https://github.com/usuario/fiap-cpad-cp2-fiafood
+cd fiap-cpad-cp2-fiafood
 npm install
 npx expo start
+```
+
+Depois, abra o QR Code pelo Expo Go ou execute no emulador.
+
+## Demonstracao Visual
+
+Antes da entrega, adicionar prints atualizados de todas as telas:
+
+- Login
+- Cadastro
+- Home
+- Menu com busca
+- Carrinho vazio
+- Carrinho com itens
+- Cupons
+
+Tambem adicionar um GIF ou video demonstrando o fluxo completo:
+
+```text
+cadastro -> login -> busca no menu -> adicionar item -> aplicar cupom -> finalizar pedido -> logout
+```
+
+Link do video/GIF: adicionar aqui.
+
+## Estrutura do Projeto
+
+```text
+app/
+  _layout.js       Rotas, tabs e protecao de acesso
+  login.js         Tela de login
+  cadastro.js      Tela de cadastro
+  index.js         Home
+  menu.js          Cardapio e busca em tempo real
+  carrinho.js      Carrinho e finalizacao do pedido
+  cupons.js        Cupons disponiveis e resgatados
+
+context/
+  AuthContext.js       Autenticacao, usuarios e sessao
+  carrinhoContext.js   Carrinho, cupons e pedidos
+
+assets/
+  Imagens do app e do menu
+```
+
+## Context API
+
+### AuthContext
+
+Gerencia:
+
+- usuario logado
+- loading inicial da sessao
+- cadastro
+- login
+- logout
+
+O contexto e consumido nas telas de login, cadastro, home e no layout principal.
+
+### CarrinhoContext
+
+Gerencia:
+
+- itens do carrinho
+- cupom aplicado
+- cupons resgatados
+- pedidos finalizados
+- total do pedido
+- local de entrega
+
+O contexto e consumido nas telas Home, Menu, Carrinho e Cupons.
+
+## AsyncStorage
+
+O projeto usa AsyncStorage para persistir dados locais. Chaves usadas:
+
+- `@fiafood:usuarios` - lista de usuarios cadastrados
+- `@fiafood:sessao` - usuario logado atualmente
+- `@fiafood:carrinho` - itens adicionados ao carrinho
+- `@fiafood:cupom` - cupom aplicado no pedido
+- `@fiafood:cupons` - estado dos cupons resgatados
+- `@fiafood:pedidos` - pedidos finalizados
+
+A leitura dos dados acontece ao montar os contexts com `useEffect`. As atualizacoes sao salvas sempre que o carrinho, cupons, cupom aplicado ou pedidos mudam.
+
+## Autenticacao
+
+O cadastro salva os dados do usuario no AsyncStorage. O login busca os usuarios salvos e valida e-mail e senha. Ao entrar, a sessao e salva em `@fiafood:sessao`.
+
+Quando o app abre novamente, o `AuthContext` tenta carregar a sessao salva. Se existir usuario logado, o app entra direto nas telas principais. Se nao existir, o usuario e redirecionado para login.
+
+## Navegacao Protegida
+
+A protecao fica em `app/_layout.js`. O layout verifica o usuario do `AuthContext`:
+
+- sem usuario logado: redireciona para `/login`
+- usuario logado tentando acessar login/cadastro: redireciona para `/`
+- login e cadastro ficam escondidos da Tab Bar
+
+## Formularios e Validacao
+
+Login e cadastro possuem validacao inline:
+
+- campo vazio
+- e-mail invalido
+- senha com menos de 6 caracteres
+- confirmacao de senha diferente
+
+Os erros aparecem abaixo do campo correspondente, em vermelho. Os botoes ficam desabilitados enquanto o formulario esta invalido.
+
+## Diferencial Implementado
+
+O diferencial escolhido foi **busca e filtragem em tempo real**.
+
+Escolhemos esse diferencial porque combina diretamente com o uso do FIAFOOD: o usuario pode procurar rapidamente por produtos como coxinha, refrigerante, bolo ou por categorias como salgados, bebidas e doces. Isso melhora a experiencia, deixa o pedido mais rapido e e facil de demonstrar durante a apresentacao.
+
+Tecnicamente, foi implementado em `app/menu.js` usando `useState`, `TextInput` e filtro dinamico nos produtos. Quando nao existe resultado, o app mostra uma mensagem de lista vazia.
+
+## Proximos Passos
+
+- Tela de pagamento
+- Tempo estimado de preparo
+- Edicao de quantidade no carrinho
+- Historico completo de pedidos em uma tela propria
